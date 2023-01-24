@@ -1,0 +1,27 @@
+{
+  "name": "cassandra-knex",
+  "version": "0.0.0",
+  "description": "A plugin for knex.js to build Apache Cassandra queries",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beekeeper-studio/cassandra-knex.git"
+  },
+  "author": "Day Matchullis <dsm6069@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/beekeeper-studio/cassandra-knex/issues"
+  },
+  "homepage": "https://github.com/beekeeper-studio/cassandra-knex#readme",
+  "devDependencies": {
+    "cassandra-driver": "*",
+    "knex": "*"
+  },
+  "peerDependencies": {
+    "cassandra-driver": "^4.6.4",
+    "knex": "^2.4.2"
+  }
+}
