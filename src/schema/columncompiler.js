@@ -1,4 +1,4 @@
-import ColumnCompiler from "knex/lib/schema/columncompiler";
+import ColumnCompiler from 'knex/lib/schema/columncompiler';
 
 
 class ColumnCompiler_Cassandra extends ColumnCompiler {
