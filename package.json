@@ -2,7 +2,8 @@
   "name": "cassandra-knex",
   "version": "0.0.0",
   "description": "A plugin for knex.js to build Apache Cassandra queries",
-  "main": "lib/index.js",
+  "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,10 +22,10 @@
     "knex": "*"
   },
   "peerDependencies": {
-    "cassandra-driver": "^4.6.4",
     "knex": "^2.4.2"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "cassandra-driver": "^4.6.4"
   }
 }

@@ -1,5 +1,10 @@
-import Client from 'knex/lib/client';
+import Client from 'knex/lib/client.js';
 import { promisify } from 'node:util';
+import SchemaCompiler from './schema/compiler.js';
+import QueryCompiler from './query/querycompiler.js';
+import ColumnCompiler from './schema/columncompiler.js';
+import TableCompiler from './schema/tablecompiler.js';
+import cassandra_driver from 'cassandra-driver';
 
 //TEMP@DAY
 function TODO() {
@@ -8,23 +13,27 @@ function TODO() {
 
 class Client_Cassandra extends Client {
 	_driver() {
-		return require('cassandra-driver');
+		return cassandra_driver;
 	}
 
 	schemaCompiler() {
-		throw TODO();
+		return new SchemaCompiler(this, ...arguments);
 	}
 
 	queryCompiler(builder, formatter) {
-		throw TODO();
+		return new QueryCompiler(this, builder, formatter);
 	}
 
-	columnBuilder() {
-		throw TODO();
+	columnCompiler() {
+		return new ColumnCompiler(this, ...arguments);
 	}
+
+	// columnBuilder() {
+	// 	throw TODO();
+	// }
 
 	tableCompiler() {
-		throw TODO();
+		return new TableCompiler(this, ...arguments);
 	}
 
 	transaction() {
@@ -32,7 +41,8 @@ class Client_Cassandra extends Client {
 	}
 
 	wrapIdentifierImpl(value) {
-		throw TODO();
+		return value;
+		// throw TODO();
 		//TODO@DAY this function seems to be completely useless in the firebird implementation?! Investigate further
 	}
 
@@ -75,6 +85,8 @@ class Client_Cassandra extends Client {
 				resolve();
 				return;
 			}
+			if (!obj.options) obj.options = {};
+			obj.options.prepare = true;
 			connection.execute(
 				obj.sql,
 				obj.bindings,
@@ -82,11 +94,38 @@ class Client_Cassandra extends Client {
 				(err, result) => {
 					if (err) return reject(err);
 					//needs to be formatted as [rows, fields]
-					obj.response = result;
-					console.log(result);
+					obj.response = [result.rows, result.columns];
 					resolve(obj);
 				}
 			);
 		});
 	}
+
+	async processResponse(obj, runner) {
+		if (!obj) return;
+
+		const { response, method } = obj;
+		if (obj.output) {
+			return obj.output.call(runner, response);
+		}
+
+		const [rows, fields] = response;
+		// TODO@Day fixBlobCallbacks?
+
+		switch (method) {
+			case 'first':
+				return rows[0];
+			default:
+				return rows;
+		}
+	}
 }
+
+Object.assign(Client_Cassandra.prototype, {
+	requestQueue: [],
+	dialect: 'cassandra',
+	driverName: 'cassandra-driver'
+});
+
+// module.exports = Client_Cassandra;
+export default Client_Cassandra;

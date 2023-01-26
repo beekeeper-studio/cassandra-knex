@@ -1,4 +1,4 @@
-import ColumnCompiler from 'knex/lib/schema/columncompiler';
+import ColumnCompiler from 'knex/lib/schema/columncompiler.js';
 
 
 class ColumnCompiler_Cassandra extends ColumnCompiler {
@@ -48,4 +48,5 @@ ColumnCompiler_Cassandra.prototype.counter = 'counter';
 ColumnCompiler_Cassandra.prototype.inet = 'inet';
 ColumnCompiler_Cassandra.prototype.uuid = 'uuid';
 
-module.exports = ColumnCompiler_Cassandra;
+// module.exports = ColumnCompiler_Cassandra;
+export default ColumnCompiler_Cassandra;

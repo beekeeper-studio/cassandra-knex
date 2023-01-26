@@ -1,23 +1,20 @@
-import TableCompiler from 'knex/lib/schema/tablecompiler';
-import { isObject } from 'knex/lib/util/is';
-import { isString } from 'lodash';
+import TableCompiler from 'knex/lib/schema/tablecompiler.js';
+import { isObject } from 'knex/lib/util/is.js';
+import pkg from 'lodash';
+const { isString, indexOf } = pkg
 
 class TableCompiler_Cassandra extends TableCompiler {
-	tablePrimaryKey = '';
-	
 	// Create a new table.
 	createQuery(columns, ifNot) {
 		if (ifNot) throw new Error('createQuery ifNot not implemented');
-		let sql = 
-			'create table ' + this.tableName() + ' (' + columns.sql.join(', ');
-
-		sql += this.tablePrimaryKey;
-		sql += ')';
+		else if (!columns.sql.some(x => x.includes('PRIMARY KEY'))) throw new Error('Tables must have a primary key!!');
+		let sql = `CREATE TABLE ${this.tableName()} (${columns.sql.join(', ')})`;
 
 		this.pushQuery(sql);
+		//TODO@DAY add support for table options.
 	}
 
-	//TODO@DAY Index, comment, addColumns, alterColumns, dropColumn, renameColumn, dropIndex, dropPrimary?
+	//TODO@DAY Index, comment, alterColumns, dropColumn, renameColumn, dropIndex, dropPrimary?
 	// columns should start with all of the partition keys
 	// adding lastPartitionKey to the `options` argument, which will be the index of the last entry for the partition key 
 	primary(columns, constraintName) {
@@ -43,17 +40,55 @@ class TableCompiler_Cassandra extends TableCompiler {
 		}
 
 		if (!this.forCreate) {
-			//alter query here
+			throw new Error('Cassandra does not support altering primary keys.');
 		} else {
-			this.tablePrimaryKey = `PRIMARY KEY $(${partitionStr}${columns.join(', ')})`;
+			const tablePrimaryKey = `PRIMARY KEY (${partitionStr}${columns.join(', ')})`;
+			this.pushQuery(tablePrimaryKey, columns);
 		}
 	}
+
+	addColumns(columns, prefix = this.addColumnsPrefix) {
+		if (columns.sql.length > 0) {
+			this.pushQuery({
+				sql: `ALTER TABLE ${this.tableName()} ${prefix} (${columns.sql.join(', ')})`,
+				bindings: columns.bindings
+			});
+		}
+	}
+
+	alterTableForCreate(columnTypes) {
+		console.log(columnTypes);
+		this.forCreate = true;
+		const savedSequence = this.sequence;
+		const alterTable = this.grouped.alterTable || [];
+		this.grouped.alterTable = [];
+		for (let i = 0, l = alterTable.length; i < l; i++) {
+			const statement = alterTable[i];
+			if (indexOf(this.createAlterTableMethods, statement.method) < 0) {
+				this.grouped.alterTable.push(statement);
+				continue;
+			}
+			if (this[statement.method]) {
+				this.sequence = [];
+				this[statement.method].apply(this, statement.args);
+				console.log('Method: ', statement.method);
+				console.log(this.sequence);
+				columnTypes.sql.push(this.sequence[0].sql);
+			} else {
+				this.client.logger.err(`Debug: ${statement.method} does not exist`);
+			}
+			this.sequence = savedSequence;
+			this.forCreate = false;
+		}
+	}
+
 }
 
 TableCompiler_Cassandra.prototype.createAlterTableMethods = ['primary'];
 TableCompiler_Cassandra.prototype.lowerCase = false;
-// TableCompiler_Cassandra.prototype.
+TableCompiler_Cassandra.prototype.addColumnsPrefix = 'ADD';
 // TableCompiler_Cassandra.prototype.
 // TableCompiler_Cassandra.prototype.
 
-module.exports = TableCompiler_Cassandra;
+// module.exports = TableCompiler_Cassandra;
+export default TableCompiler_Cassandra;
