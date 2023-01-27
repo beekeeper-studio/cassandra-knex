@@ -4,7 +4,8 @@ const { flatten } = pkg;
 
 class SchemaCompiler_Cassandra extends SchemaCompiler {
 	hasTable(tableName) {
-		const sql = `SELECT table_name as x FROM system_schema.tables WHERE table_name = ${String(tableName)}${this.schema ? 'AND keyspace_name = ' + this.schema : ''} ALLOW FILTERING`;
+		const sanitizedTableName = this.formatter.wrap(tableName);
+		const sql = `SELECT table_name as x FROM system_schema.tables WHERE table_name = '${sanitizedTableName}'${this.schema ? 'AND keyspace_name = ' + this.formatter.wrap(this.schema) : ''} ALLOW FILTERING`;
 		this.pushQuery({
 			sql,
 			output: (raw) => {
@@ -13,7 +14,7 @@ class SchemaCompiler_Cassandra extends SchemaCompiler {
 					return;
 				}
 
-				return String(result.x) === String(tableName);
+				return this.formatter.wrap(String(result.x)) === sanitizedTableName;
 			}
 		});
 	}

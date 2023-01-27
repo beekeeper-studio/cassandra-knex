@@ -8,6 +8,8 @@ class TableCompiler_Cassandra extends TableCompiler {
 	createQuery(columns, ifNot) {
 		if (ifNot) throw new Error('createQuery ifNot not implemented');
 		else if (!columns.sql.some(x => x.includes('PRIMARY KEY'))) throw new Error('Tables must have a primary key!!');
+		// NOTE@rathboma tableName() wraps identifiers already, there is a columnize function that's supposed to wrap
+		// columns for us, but it was giving me a lot of trouble.
 		let sql = `CREATE TABLE ${this.tableName()} (${columns.sql.join(', ')})`;
 
 		this.pushQuery(sql);

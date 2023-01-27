@@ -28,10 +28,6 @@ class Client_Cassandra extends Client {
 		return new ColumnCompiler(this, ...arguments);
 	}
 
-	// columnBuilder() {
-	// 	throw TODO();
-	// }
-
 	tableCompiler() {
 		return new TableCompiler(this, ...arguments);
 	}
@@ -40,10 +36,14 @@ class Client_Cassandra extends Client {
 		throw TODO();
 	}
 
+	wrapIdentifier(value, queryContext) {
+		return this.config.wrapIdentifier ? 
+			this.config.wrapIdentifier(value, this.wrapIdentifierImpl, queryContext) :
+			this.wrapIdentifierImpl(value); 
+	}
+
 	wrapIdentifierImpl(value) {
-		return value;
-		// throw TODO();
-		//TODO@DAY this function seems to be completely useless in the firebird implementation?! Investigate further
+		return value.replace(/"/g, '""').replace(/'/g, `''`).replace(/--|\/\*|\*\/|\/\//g, '').replace(/[^a-zA-Z0-9_]/g, '_');
 	}
 
 	// get a raw connection, called by the `pool` whenever a new
