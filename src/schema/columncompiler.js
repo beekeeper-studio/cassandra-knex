@@ -13,6 +13,10 @@ class ColumnCompiler_Cassandra extends ColumnCompiler {
     else return 'ascii';
   }
 
+  varchar(column) {
+    return this.text(column);
+  }
+
   map(key, value) {
     return `map<${key}, ${value}>`;
   }

@@ -56,32 +56,6 @@ class TableCompiler_Cassandra extends TableCompiler {
 		}
 	}
 
-	alterTableForCreate(columnTypes) {
-		console.log(columnTypes);
-		this.forCreate = true;
-		const savedSequence = this.sequence;
-		const alterTable = this.grouped.alterTable || [];
-		this.grouped.alterTable = [];
-		for (let i = 0, l = alterTable.length; i < l; i++) {
-			const statement = alterTable[i];
-			if (indexOf(this.createAlterTableMethods, statement.method) < 0) {
-				this.grouped.alterTable.push(statement);
-				continue;
-			}
-			if (this[statement.method]) {
-				this.sequence = [];
-				this[statement.method].apply(this, statement.args);
-				console.log('Method: ', statement.method);
-				console.log(this.sequence);
-				columnTypes.sql.push(this.sequence[0].sql);
-			} else {
-				this.client.logger.err(`Debug: ${statement.method} does not exist`);
-			}
-			this.sequence = savedSequence;
-			this.forCreate = false;
-		}
-	}
-
 }
 
 TableCompiler_Cassandra.prototype.createAlterTableMethods = ['primary'];

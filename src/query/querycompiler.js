@@ -30,7 +30,31 @@ class QueryCompiler_Cassandra extends QueryCompiler {
 		const noLimit = !this.single.limit && this.single.limit !== 0;
 		if (noLimit) return '';
 
-		return `limit ${this._getValueorParameterFromAttribute('limit')}`;
+		return `limit ${this._getValueOrParameterFromAttribute('limit')}`;
+	}
+
+	select() {
+		const sql = super.select();
+
+		return `${sql} ALLOW FILTERING`;
+	}
+
+	insert() {
+		let sql = super.insert();
+		const valuesStartIndex = sql.indexOf('values') + 7;		
+		const insertStmt = sql.substring(0, valuesStartIndex);
+		sql = sql.substring(valuesStartIndex);
+		let values = sql.split('), (');
+		
+		for (let i = 0; i < values.length; i++) {
+			let value = values[i];
+			if (value[0] != '(') value = `(${value}`;
+			if (!value.endsWith(')')) value = `${value})`;
+
+			value = `${insertStmt}${value};`;
+			values[i] = value;
+		}
+		return `BEGIN BATCH\n ${values.join('\n')} \nAPPLY BATCH`
 	}
 
 	// validation that can be worked on later.
