@@ -4,8 +4,8 @@ const { flatten } = pkg;
 
 class SchemaCompiler_Cassandra extends SchemaCompiler {
 	hasTable(tableName) {
-		const sanitizedTableName = this.formatter.wrap(tableName);
-		const sql = `SELECT table_name as x FROM system_schema.tables WHERE table_name = '${sanitizedTableName}'${this.schema ? 'AND keyspace_name = ' + this.formatter.wrap(this.schema) : ''} ALLOW FILTERING`;
+		const sanitizedTableName = this.formatter.wrap(tableName).toLowerCase();
+		const sql = `SELECT table_name as x FROM system_schema.tables WHERE table_name = '${sanitizedTableName}'${this.schema ? ` AND keyspace_name = '${this.formatter.wrap(this.schema)}'` : ''} ALLOW FILTERING`;
 		this.pushQuery({
 			sql,
 			output: (raw) => {

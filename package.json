@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand"
   },
   "repository": {
     "type": "git",
@@ -18,14 +18,17 @@
   },
   "homepage": "https://github.com/beekeeper-studio/cassandra-knex#readme",
   "devDependencies": {
+    "@types/jest": "^29.4.0",
     "cassandra-driver": "*",
-    "knex": "*"
+    "jest": "^29.4.1",
+    "knex": "*",
+    "testcontainers": "^9.1.1"
   },
   "peerDependencies": {
     "knex": "^2.4.2"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
-    "cassandra-driver": "^4.6.4"
+    "cassandra-driver": "^4.6.4",
+    "lodash": "^4.17.21"
   }
 }

@@ -43,6 +43,7 @@ class Client_Cassandra extends Client {
 	}
 
 	wrapIdentifierImpl(value) {
+		if (value === '*') return value;
 		return value.replace(/"/g, '""').replace(/'/g, `''`).replace(/--|\/\*|\*\/|\/\//g, '').replace(/[^a-zA-Z0-9_]/g, '_');
 	}
 

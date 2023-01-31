@@ -1,7 +1,7 @@
 import TableCompiler from 'knex/lib/schema/tablecompiler.js';
 import { isObject } from 'knex/lib/util/is.js';
 import pkg from 'lodash';
-const { isString, indexOf } = pkg
+const { isString } = pkg
 
 class TableCompiler_Cassandra extends TableCompiler {
 	// Create a new table.
@@ -34,6 +34,8 @@ class TableCompiler_Cassandra extends TableCompiler {
 		if (lastPartitionKey && !isString(columns)) {
 			partitions = columns.slice(0, lastPartitionKey + 1);
 			columns = columns.slice(lastPartitionKey + 1);
+		} else if (isString(columns)) {
+			columns = [ columns ];
 		}
 
 		let partitionStr = '';
