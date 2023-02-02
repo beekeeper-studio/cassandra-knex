@@ -1,6 +1,6 @@
 {
   "name": "cassandra-knex",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A plugin for knex.js to build Apache Cassandra queries",
   "main": "src/index.js",
   "type": "module",

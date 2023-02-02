@@ -1,5 +1,4 @@
 import Client from 'knex/lib/client.js';
-import { promisify } from 'node:util';
 import SchemaCompiler from './schema/compiler.js';
 import QueryCompiler from './query/querycompiler.js';
 import ColumnCompiler from './schema/columncompiler.js';
