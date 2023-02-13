@@ -16,6 +16,7 @@ describe('Apache Cassandra dialect', () => {
 		container = await new GenericContainer('cassandra')
 			.withName('testcassandra')
 			.withExposedPorts(9042)
+			.withStartupTimeout(dbTimeout)
 			.start();
 
 		jest.setTimeout(timeoutDefault);

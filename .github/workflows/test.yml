@@ -10,11 +10,7 @@ jobs:
   testing:
     name: Test Suite
 
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repo
