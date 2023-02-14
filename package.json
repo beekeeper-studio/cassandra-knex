@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand",
-    "ci_test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand --ci --silent"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand --forceExit",
+    "ci_test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand --ci --silent --forceExit"
   },
   "repository": {
     "type": "git",
