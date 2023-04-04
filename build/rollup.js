@@ -12,8 +12,8 @@ export default [
     ],
     output: [
       {
-        file: "dist/cassandra_knex_esm.js",
-        format: "esm",
+        file: "dist/cassandra_knex.cjs",
+        format: "cjs",
         sourcemap: true,
       }
     ]
