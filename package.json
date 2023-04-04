@@ -18,9 +18,6 @@
   "bugs": {
     "url": "https://github.com/beekeeper-studio/cassandra-knex/issues"
   },
-  "directories": {
-    "dist": "./dist"
-  },
   "homepage": "https://github.com/beekeeper-studio/cassandra-knex#readme",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",
