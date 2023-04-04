@@ -3,7 +3,7 @@ name: Build ESM Module
 on:
   push:
     branches: [ main, rollup ]
-  pull_requeest: 
+  pull_request: 
     branches: [ main, rollup ]
 
 jobs:
