@@ -1,4 +1,4 @@
-name: Build ESM Module
+name: Build CJS Module
 
 on:
   push:
