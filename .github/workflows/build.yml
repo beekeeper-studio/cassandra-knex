@@ -1,0 +1,33 @@
+name: Build ESM Module
+
+on:
+  push:
+    branches: [ main, rollup ]
+  pull_requeest: 
+    branches: [ main, rollup ]
+
+jobs:
+  build:
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.*
+
+    - name: Clean Cache
+      run: yarn cache clean
+
+    - name: Install packages
+      run: yarn install
+
+    - name: Build
+      run: yarn build
+
+    - name: Upload artifacts
+      uses: actions/upload-artifacts@v1
+      with:
+        name: esm
+        path: dist

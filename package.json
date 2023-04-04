@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand --forceExit",
-    "ci_test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand --ci --silent --forceExit"
+    "ci_test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand --ci --silent --forceExit",
+    "build": "rollup -c build/rollup.js"
   },
   "repository": {
     "type": "git",
@@ -19,11 +20,15 @@
   },
   "homepage": "https://github.com/beekeeper-studio/cassandra-knex#readme",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "@types/jest": "^29.4.0",
     "cassandra-driver": "*",
     "jest": "^29.4.1",
     "knex": "*",
-    "testcontainers": "^9.1.1"
+    "rollup": "^3.20.2",
+    "testcontainers": "^9.1.1",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-json": "^6.0.0"
   },
   "peerDependencies": {
     "knex": "^2.4.2"

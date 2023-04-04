@@ -19,12 +19,15 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: 14.*
+        node-version: 16.*
+
+    - name: Clean cache
+      run: yarn cache clean
 
     - name: Install packages
-      run: npm install
+      run: yarn install
 
     - name: Run tests
-      run: npm run ci_test
+      run: yarn ci_test
       env:
         TESTCONTAINERS_RYUK_DISABLED: true

@@ -1,6 +1,5 @@
 import SchemaCompiler from 'knex/lib/schema/compiler.js';
-import pkg from 'lodash';
-const { flatten } = pkg;
+import _ from 'lodash';
 
 class SchemaCompiler_Cassandra extends SchemaCompiler {
 	hasTable(tableName) {
@@ -9,7 +8,7 @@ class SchemaCompiler_Cassandra extends SchemaCompiler {
 		this.pushQuery({
 			sql,
 			output: (raw) => {
-				const result = flatten(raw).shift();
+				const result = _.flatten(raw).shift();
 				if (!result || !(result instanceof Object)) {
 					return;
 				}
@@ -18,10 +17,6 @@ class SchemaCompiler_Cassandra extends SchemaCompiler {
 			}
 		});
 	}
-}
-
-function prefixedTableName(prefix, table) {
-	return prefix ? `${prefix}.${table}` : table;
 }
 
 // module.exports = SchemaCompiler_Cassandra;
