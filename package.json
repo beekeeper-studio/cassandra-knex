@@ -2,12 +2,12 @@
   "name": "cassandra-knex",
   "version": "0.1.0",
   "description": "A plugin for knex.js to build Apache Cassandra queries",
-  "main": "src/index.js",
-  "type": "module",
+  "main": "dist/cassandra_knex.cjs",
+  "module": "src/index.js",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand --forceExit",
     "ci_test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles --runInBand --ci --silent --forceExit",
-    "build": "rollup -c build/rollup.js"
+    "build": "rollup -c build/rollup.mjs"
   },
   "repository": {
     "type": "git",

@@ -2,7 +2,7 @@ name: Test Cassandra Knex
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, rollup ]
   pull_request:
     branches: [ main ]
 

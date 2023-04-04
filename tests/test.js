@@ -1,12 +1,11 @@
 // Tests here
-import { GenericContainer, Network } from 'testcontainers';
-import CassandraKnex from '../src/index.js';
-import knexLib from 'knex';
-import { jest } from '@jest/globals';
+const { GenericContainer } = require('testcontainers');
+const CassandraKnex = require('../dist/cassandra_knex.cjs');
+const knexLib = require('knex');
+// const jest = require('@jest/globals');
 
 describe('Apache Cassandra dialect', () => {
 	let container;
-	let network;
 	let cassKnex;
 	const dbTimeout = 120000;
 	const timeoutDefault = 5000;
